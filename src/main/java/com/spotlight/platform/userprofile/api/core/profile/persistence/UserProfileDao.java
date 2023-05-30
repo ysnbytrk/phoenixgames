@@ -9,4 +9,5 @@ public interface UserProfileDao {
     Optional<UserProfile> get(UserId userId);
 
     void put(UserProfile userProfile);
+
 }
