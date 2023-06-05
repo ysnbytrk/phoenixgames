@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public class CollectCommandExecutor implements CommandExecutor {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserProfileService userProfileService;
 
     @Inject
@@ -35,6 +35,7 @@ public class CollectCommandExecutor implements CommandExecutor {
             userProfileService.update(updatedUserProfile);
         } catch (EntityNotFoundException e) {
             logger.error("UserProfile not found with UserId::" + collectCommand.getUserId(), e);
+            throw e;
         }
     }
 

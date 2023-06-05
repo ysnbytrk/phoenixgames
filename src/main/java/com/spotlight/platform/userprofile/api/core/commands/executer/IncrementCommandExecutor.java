@@ -36,9 +36,9 @@ public class IncrementCommandExecutor implements CommandExecutor {
                 oldUserProfile = oldUserProfile.incrementUserProfileProperty(propertyName, incrementValue);
             }
             userProfileService.update(oldUserProfile);
-        } catch (
-                EntityNotFoundException e) {
+        } catch (EntityNotFoundException e) {
             logger.error("UserProfile not found with UserId::" + incrementCommand.getUserId(), e);
+            throw e;
         }
     }
 

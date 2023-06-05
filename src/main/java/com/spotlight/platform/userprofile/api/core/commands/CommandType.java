@@ -14,6 +14,7 @@ public enum CommandType {
      */
     INCREMENT,
 
+    UNSUPPORTED,
     /**
      * The COLLECT command type is used to collect values into a list within the user profile properties.
      */

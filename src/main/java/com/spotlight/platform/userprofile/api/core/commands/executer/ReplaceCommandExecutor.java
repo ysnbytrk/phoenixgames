@@ -42,6 +42,7 @@ public class ReplaceCommandExecutor implements CommandExecutor {
             userProfileService.update(oldUserProfile);
         } catch (EntityNotFoundException e) {
             logger.error("UserProfile not found with UserId::" + replaceCommand.getUserId(), e);
+            throw e;
         }
     }
 
