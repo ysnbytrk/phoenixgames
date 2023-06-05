@@ -22,20 +22,12 @@ public record UserProfile(@JsonProperty UserId userId,
     }
 
     public UserProfile collectUserProfileProperty(UserProfilePropertyName propertyName, List<String> valuesToAdd) {
-        Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(userProfileProperties);
-        UserProfilePropertyValue currentValue = userProfileProperties.getOrDefault(propertyName, UserProfilePropertyValue.valueOf(Collections.emptyList()));
-        Object currentValueObj = currentValue.getValue();
-        List<String> updatedValue = new ArrayList<>();
-
-        if (currentValueObj instanceof List<?>) {
-            updatedValue.addAll((List<String>) currentValueObj);
-        }
-
-        updatedValue.addAll(valuesToAdd);
-        UserProfilePropertyValue updatedPropertyValue = UserProfilePropertyValue.valueOf(updatedValue);
-        updatedProperties.put(propertyName, updatedPropertyValue);
-        return new UserProfile(userId, OffsetDateTime.now().toInstant(), updatedProperties);
+        Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(this.userProfileProperties);
+        UserProfilePropertyValue newPropertyValue = UserProfilePropertyValue.valueOf(valuesToAdd);
+        updatedProperties.put(propertyName, newPropertyValue);
+        return new UserProfile(this.userId, this.latestUpdateTime, updatedProperties);
     }
+
 
     public UserProfile incrementUserProfileProperty(UserProfilePropertyName propertyName, int incrementValue) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(userProfileProperties);

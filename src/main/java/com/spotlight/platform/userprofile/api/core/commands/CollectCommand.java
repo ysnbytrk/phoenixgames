@@ -1,4 +1,4 @@
-package com.spotlight.platform.userprofile.api.web.commands;
+package com.spotlight.platform.userprofile.api.core.commands;
 
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
@@ -6,7 +6,6 @@ import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfi
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfilePropertyValue;
 
 import java.time.OffsetDateTime;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,15 +43,4 @@ public record CollectCommand(UserProfile userProfile) implements Command {
         return getUserProfile().userId();
     }
 
-    @Override
-    public UserProfile execute(UserProfile oldUserProfile) {
-
-        Map<UserProfilePropertyName, UserProfilePropertyValue> profileProperties = this.getUserProfile().userProfileProperties();
-        for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> entry : profileProperties.entrySet()) {
-            UserProfilePropertyName propertyName = entry.getKey();
-            List<String> valuesToAdd = (List<String>) entry.getValue().getValue();
-            oldUserProfile = oldUserProfile.collectUserProfileProperty(propertyName, valuesToAdd);
-        }
-        return oldUserProfile;
-    }
 }

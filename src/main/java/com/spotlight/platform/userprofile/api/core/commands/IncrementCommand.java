@@ -1,4 +1,4 @@
-package com.spotlight.platform.userprofile.api.web.commands;
+package com.spotlight.platform.userprofile.api.core.commands;
 
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
@@ -42,16 +42,5 @@ public record IncrementCommand(UserProfile userProfile) implements Command {
         return getUserProfile().userId();
     }
 
-    @Override
-    public UserProfile execute(UserProfile oldUserProfile) {
-        Map<UserProfilePropertyName, UserProfilePropertyValue> increments = this.getUserProfile().userProfileProperties();
 
-        for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> entry : increments.entrySet()) {
-            UserProfilePropertyName propertyName = entry.getKey();
-            final UserProfilePropertyValue userProfilePropertyValue = entry.getValue();
-            int incrementValue = Integer.parseInt(userProfilePropertyValue.getValue().toString());
-            oldUserProfile = oldUserProfile.incrementUserProfileProperty(propertyName, incrementValue);
-        }
-        return oldUserProfile;
-    }
 }

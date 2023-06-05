@@ -1,4 +1,4 @@
-package com.spotlight.platform.userprofile.api.web.commands;
+package com.spotlight.platform.userprofile.api.core.commands;
 
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
@@ -42,15 +42,4 @@ public record ReplaceCommand(UserProfile userProfile) implements Command {
         return getUserProfile().userId();
     }
 
-    @Override
-    public UserProfile execute(UserProfile oldUserProfile) {
-        Map<UserProfilePropertyName, UserProfilePropertyValue> properties = this.getUserProfile().userProfileProperties();
-
-        for (Map.Entry<UserProfilePropertyName, UserProfilePropertyValue> entry : properties.entrySet()) {
-            UserProfilePropertyName propertyName = entry.getKey();
-            UserProfilePropertyValue propertyValue = entry.getValue();
-            oldUserProfile = oldUserProfile.withUserProfileProperty(propertyName, propertyValue);
-        }
-        return oldUserProfile;
-    }
 }

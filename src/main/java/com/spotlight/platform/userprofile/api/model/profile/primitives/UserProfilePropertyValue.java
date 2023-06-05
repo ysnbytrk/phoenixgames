@@ -3,6 +3,8 @@ package com.spotlight.platform.userprofile.api.model.profile.primitives;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
+import java.util.Objects;
+
 public class UserProfilePropertyValue {
 
     private final Object value;
@@ -22,16 +24,16 @@ public class UserProfilePropertyValue {
     }
 
     @Override
-    public int hashCode() {
-        return value.hashCode();
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserProfilePropertyValue that = (UserProfilePropertyValue) o;
+        return Objects.equals(value, that.value);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == null || this.getClass() != obj.getClass()) {
-            return false;
-        }
-        return value.equals(((UserProfilePropertyValue) obj).getValue());
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }
 
