@@ -1,7 +1,7 @@
 package com.spotlight.platform.userprofile.api.core.profile;
 
 import com.spotlight.platform.userprofile.api.core.exceptions.EntityNotFoundException;
-import com.spotlight.platform.userprofile.api.core.profile.persistence.UserProfileDao;
+import com.spotlight.platform.userprofile.api.core.profile.persistence.IUserProfileDao;
 import com.spotlight.platform.userprofile.api.model.profile.UserProfile;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserId;
 import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfileFixtures;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 class UserProfileServiceTest {
     @Mock
-    private UserProfileDao userProfileDaoMock;
+    private IUserProfileDao IUserProfileDaoMock;
 
     @InjectMocks
     private UserProfileService userProfileService;
@@ -38,7 +38,7 @@ class UserProfileServiceTest {
     class Get {
         @Test
         void getForExistingUser_returnsUser() {
-            when(userProfileDaoMock.get(any(UserId.class))).thenReturn(Optional.of(UserProfileFixtures.USER_PROFILE));
+            when(IUserProfileDaoMock.get(any(UserId.class))).thenReturn(Optional.of(UserProfileFixtures.USER_PROFILE));
 
             assertThat(userProfileService.get(UserProfileFixtures.USER_ID)).usingRecursiveComparison()
                     .isEqualTo(UserProfileFixtures.USER_PROFILE);
@@ -46,7 +46,7 @@ class UserProfileServiceTest {
 
         @Test
         void getForNonExistingUser_throwsException() {
-            when(userProfileDaoMock.get(any(UserId.class))).thenReturn(Optional.empty());
+            when(IUserProfileDaoMock.get(any(UserId.class))).thenReturn(Optional.empty());
 
             assertThatThrownBy(() -> userProfileService.get(UserProfileFixtures.USER_ID)).isExactlyInstanceOf(
                     EntityNotFoundException.class);
@@ -65,7 +65,7 @@ class UserProfileServiceTest {
             userProfileService.update(userProfile);
 
             // Verify that the userProfileDaoMock's put method is called with the correct argument
-            verify(userProfileDaoMock).put(userProfileCaptor.capture());
+            verify(IUserProfileDaoMock).put(userProfileCaptor.capture());
 
             // Verify that the captured argument matches the original user profile
             UserProfile capturedUserProfile = userProfileCaptor.getValue();

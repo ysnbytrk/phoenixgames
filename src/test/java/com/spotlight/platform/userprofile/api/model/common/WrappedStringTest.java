@@ -1,15 +1,18 @@
 package com.spotlight.platform.userprofile.api.model.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spotlight.platform.userprofile.api.core.json.JsonMapper;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@JsonTest
 class WrappedStringTest {
 
-    private static final ObjectMapper JSON_MAPPER = JsonMapper.getInstance();
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Test
     void testEqualityWithSameType() {
@@ -39,14 +42,14 @@ class WrappedStringTest {
     void testSerialization() throws Exception {
         SomeId idA = new SomeId("a");
 
-        assertThat(JSON_MAPPER.writeValueAsString(idA)).isEqualTo("\"a\"");
+        assertThat(objectMapper.writeValueAsString(idA)).isEqualTo("\"a\"");
     }
 
     @Test
     void testDeserialization() {
         SomeId idA = new SomeId("a");
 
-        assertThat(JSON_MAPPER.convertValue("a", SomeId.class)).isEqualTo(idA);
+        assertThat(objectMapper.convertValue("a", SomeId.class)).isEqualTo(idA);
     }
 
     @Test

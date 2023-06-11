@@ -8,19 +8,38 @@ import com.spotlight.platform.userprofile.api.model.profile.primitives.UserProfi
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-public record UserProfile(@JsonProperty UserId userId,
-                          @JsonProperty @JsonFormat(shape = JsonFormat.Shape.STRING) Instant latestUpdateTime,
-                          @JsonProperty Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties) {
-
-
+/**
+ * Represents a user profile containing various properties.
+ */
+public record UserProfile(
+        @JsonProperty UserId userId,
+        @JsonProperty @JsonFormat(shape = JsonFormat.Shape.STRING) Instant latestUpdateTime,
+        @JsonProperty Map<UserProfilePropertyName, UserProfilePropertyValue> userProfileProperties
+) {
+    /**
+     * Creates a new UserProfile object with the given user profile property.
+     *
+     * @param propertyName  The name of the user profile property.
+     * @param propertyValue The value of the user profile property.
+     * @return A new UserProfile object with the updated user profile property.
+     */
     public UserProfile withUserProfileProperty(UserProfilePropertyName propertyName, UserProfilePropertyValue propertyValue) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(userProfileProperties);
         updatedProperties.put(propertyName, propertyValue);
         return new UserProfile(userId, OffsetDateTime.now().toInstant(), updatedProperties);
     }
 
+    /**
+     * Adds the given values to a list-type user profile property.
+     *
+     * @param propertyName The name of the user profile property.
+     * @param valuesToAdd  The values to add to the user profile property.
+     * @return A new UserProfile object with the updated user profile property.
+     */
     public UserProfile collectUserProfileProperty(UserProfilePropertyName propertyName, List<String> valuesToAdd) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(this.userProfileProperties);
         UserProfilePropertyValue newPropertyValue = UserProfilePropertyValue.valueOf(valuesToAdd);
@@ -28,7 +47,13 @@ public record UserProfile(@JsonProperty UserId userId,
         return new UserProfile(this.userId, this.latestUpdateTime, updatedProperties);
     }
 
-
+    /**
+     * Increments the value of an integer-type user profile property.
+     *
+     * @param propertyName   The name of the user profile property.
+     * @param incrementValue The value to increment the user profile property by.
+     * @return A new UserProfile object with the updated user profile property.
+     */
     public UserProfile incrementUserProfileProperty(UserProfilePropertyName propertyName, int incrementValue) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(userProfileProperties);
         UserProfilePropertyValue currentValue = userProfileProperties.getOrDefault(propertyName, UserProfilePropertyValue.valueOf(0));
@@ -39,6 +64,13 @@ public record UserProfile(@JsonProperty UserId userId,
         return new UserProfile(userId, OffsetDateTime.now().toInstant(), updatedProperties);
     }
 
+    /**
+     * Parses the integer value from the given UserProfilePropertyValue.
+     *
+     * @param userProfilePropertyValue The UserProfilePropertyValue to parse the integer value from.
+     * @return The parsed integer value.
+     * @throws IllegalArgumentException if the UserProfilePropertyValue value is not an Integer or Long.
+     */
     private int parseIntegerValue(UserProfilePropertyValue userProfilePropertyValue) {
         Object value = userProfilePropertyValue.getValue();
         if (value instanceof Integer) {
@@ -49,6 +81,4 @@ public record UserProfile(@JsonProperty UserId userId,
             throw new IllegalArgumentException("Invalid property value type. Expected Integer or Long.");
         }
     }
-
-
 }

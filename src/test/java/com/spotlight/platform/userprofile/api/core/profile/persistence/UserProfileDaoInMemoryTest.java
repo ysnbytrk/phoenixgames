@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UserProfileDaoInMemoryTest {
 
-    private final UserProfileDao dao = new UserProfileDaoInMemory();
+    private final IUserProfileDao dao = new UserProfileDaoInMemory();
 
     @Test
     void getNonExistingUser_OptionalEmptyReturned() {

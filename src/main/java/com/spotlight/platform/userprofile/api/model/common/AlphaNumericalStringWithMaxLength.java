@@ -1,20 +1,33 @@
 package com.spotlight.platform.userprofile.api.model.common;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Pattern;
 
+/**
+ * Represents an alphanumeric string with a maximum length constraint.
+ * This class extends the WrappedString class.
+ */
 public class AlphaNumericalStringWithMaxLength extends WrappedString {
     private static final int MAX_LENGTH = 1024;
     private static final int MIN_LENGTH = 1;
     private static final String PATTERN_ALPHA_NUMERIC_ONLY = "[A-Za-z0-9_-]*";
 
+    /**
+     * Constructs an AlphaNumericalStringWithMaxLength object with the provided string value.
+     *
+     * @param value The string value.
+     */
     protected AlphaNumericalStringWithMaxLength(String value) {
         super(value);
     }
 
+    /**
+     * Retrieves the value of the alphanumeric string with length and pattern constraints.
+     *
+     * @return The value of the string.
+     */
     @Override
     @Length(min = MIN_LENGTH, max = MAX_LENGTH)
     @Pattern(regexp = PATTERN_ALPHA_NUMERIC_ONLY)

@@ -21,4 +21,5 @@ public class UserProfileFixtures {
 
     public static final String SERIALIZED_USER_PROFILE = FixtureHelpers.fixture("/fixtures/model/profile/userProfile.json");
     public static final CommandData REPLACE_COMMAND_DATA = new CommandData(USER_ID, CommandType.REPLACE, Map.of(UserProfilePropertyName.valueOf("property1"), UserProfilePropertyValue.valueOf("property1Value")));
+    public static final CommandData UNSUPPORTED_COMMAND_DATA = new CommandData(USER_ID, CommandType.UNSUPPORTED, Map.of(UserProfilePropertyName.valueOf("property1"), UserProfilePropertyValue.valueOf("property1Value")));
 }

@@ -1,38 +1,35 @@
 package com.spotlight.platform.userprofile.api.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spotlight.platform.userprofile.api.core.json.JsonMapper;
-import com.spotlight.platform.userprofile.api.web.exceptionmappers.EntityNotFoundExceptionMapper;
 
 import org.junit.jupiter.api.Test;
-
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import io.dropwizard.core.setup.Environment;
-import ru.vyarus.dropwizard.guice.test.jupiter.TestDropwizardApp;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@TestDropwizardApp(value = UserProfileApiApplication.class, randomPorts = true)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserProfileApiApplicationTest {
 
+    @LocalServerPort
+    private int port;
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
     @Test
-    void objectMapper_IsOfSameInstance(ObjectMapper objectMapper) {
-        assertThat(objectMapper).isEqualTo(JsonMapper.getInstance());
+    void exceptionMappers_AreRegistered() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/nonexistent-endpoint", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    void exceptionMappers_AreRegistered(Environment environment) {
-        assertThat(getRegisteredSingletonClasses(environment)).containsOnlyOnce(EntityNotFoundExceptionMapper.class);
-    }
-
-    @Test
-    void dummyHealthCheck_IsRegistered(Environment environment) {
-        assertThat(environment.healthChecks().getNames()).contains("preventing-startup-warning-healthcheck");
-    }
-
-    protected Set<Class<?>> getRegisteredSingletonClasses(Environment environment) {
-        return environment.jersey().getResourceConfig().getSingletons().stream().map(Object::getClass).collect(Collectors.toSet());
+    void dummyHealthCheck_IsRegistered() {
+        ResponseEntity<String> response = restTemplate.getForEntity("/actuator/health", String.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 }

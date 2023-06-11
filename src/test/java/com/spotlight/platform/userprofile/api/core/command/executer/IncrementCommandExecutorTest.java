@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,14 +28,10 @@ class IncrementCommandExecutorTest {
     @Mock
     private UserProfileService userProfileService;
 
-    @Mock
-    private Logger logger;
-
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         incrementCommandExecutor = new IncrementCommandExecutor(userProfileService);
-        incrementCommandExecutor.setLogger(logger);
     }
 
     @Test
@@ -95,8 +90,7 @@ class IncrementCommandExecutorTest {
 
         // Verify that UserProfileService was called with the correct arguments
         verify(userProfileService, times(1)).get(UserProfileFixtures.USER_ID);
-        verify(logger).error(anyString(), any(EntityNotFoundException.class));
-        verifyNoMoreInteractions(userProfileService, logger);
+        verifyNoMoreInteractions(userProfileService);
     }
 
 
