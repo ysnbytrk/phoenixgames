@@ -16,6 +16,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Singleton;
 import java.util.Map;
 
+/**
+ * Executor for the ReplaceCommand.
+ */
 @Singleton
 @ExecuterQualifier(CommandType.REPLACE)
 public class ReplaceCommandExecutor implements CommandExecutor {
@@ -28,6 +31,12 @@ public class ReplaceCommandExecutor implements CommandExecutor {
         this.userProfileService = userProfileService;
     }
 
+    /**
+     * Executes the ReplaceCommand by replacing the corresponding user profile properties.
+     *
+     * @param command The ReplaceCommand to execute.
+     * @throws EntityNotFoundException if the user profile is not found.
+     */
     @Override
     public void execute(Command command) {
         ReplaceCommand replaceCommand = (ReplaceCommand) command;
@@ -41,11 +50,16 @@ public class ReplaceCommandExecutor implements CommandExecutor {
             }
             userProfileService.update(oldUserProfile);
         } catch (EntityNotFoundException e) {
-            logger.error("UserProfile not found with UserId::" + replaceCommand.getUserId(), e);
+            logger.error("UserProfile not found with UserId: " + replaceCommand.getUserId(), e);
             throw e;
         }
     }
 
+    /**
+     * Sets the logger to use for logging.
+     *
+     * @param logger The logger to set.
+     */
     public void setLogger(Logger logger) {
         this.logger = logger;
     }

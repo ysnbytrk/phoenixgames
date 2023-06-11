@@ -16,7 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Command executor implementation for executing a CollectCommand.
+ */
 public class CollectCommandExecutor implements CommandExecutor {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final UserProfileService userProfileService;
 
@@ -25,6 +29,12 @@ public class CollectCommandExecutor implements CommandExecutor {
         this.userProfileService = userProfileService;
     }
 
+    /**
+     * Executes the CollectCommand by collecting and updating the user profile properties.
+     *
+     * @param command The CollectCommand to execute.
+     * @throws EntityNotFoundException if the UserProfile is not found.
+     */
     @Override
     public void execute(Command command) {
         CollectCommand collectCommand = (CollectCommand) command;
@@ -34,11 +44,18 @@ public class CollectCommandExecutor implements CommandExecutor {
             UserProfile updatedUserProfile = collectProperties(oldUserProfile, collectCommand.getUserProfile().userProfileProperties());
             userProfileService.update(updatedUserProfile);
         } catch (EntityNotFoundException e) {
-            logger.error("UserProfile not found with UserId::" + collectCommand.getUserId(), e);
+            logger.error("UserProfile not found with UserId: " + collectCommand.getUserId(), e);
             throw e;
         }
     }
 
+    /**
+     * Collects the properties to be added to the user profile and returns the updated user profile.
+     *
+     * @param oldUserProfile   The existing user profile.
+     * @param propertiesToAdd  The properties to be added.
+     * @return The updated user profile.
+     */
     private UserProfile collectProperties(UserProfile oldUserProfile, Map<UserProfilePropertyName, UserProfilePropertyValue> propertiesToAdd) {
         Map<UserProfilePropertyName, UserProfilePropertyValue> updatedProperties = new HashMap<>(oldUserProfile.userProfileProperties());
 
@@ -64,6 +81,14 @@ public class CollectCommandExecutor implements CommandExecutor {
         return new UserProfile(oldUserProfile.userId(), oldUserProfile.latestUpdateTime(), updatedProperties);
     }
 
+    /**
+     * Extracts the values of a property from the user profile.
+     *
+     * @param userProfile    The user profile.
+     * @param propertyName   The name of the property.
+     * @return The values of the property.
+     * @throws IllegalArgumentException if the property value is not of type List.
+     */
     private List<String> extractValues(UserProfile userProfile, UserProfilePropertyName propertyName) {
         UserProfilePropertyValue propertyValue = userProfile.userProfileProperties().get(propertyName);
 

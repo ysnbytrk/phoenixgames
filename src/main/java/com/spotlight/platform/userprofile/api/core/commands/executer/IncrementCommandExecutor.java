@@ -13,9 +13,12 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import java.util.Map;
 
+/**
+ * Executor for the IncrementCommand.
+ */
 public class IncrementCommandExecutor implements CommandExecutor {
-    private final UserProfileService userProfileService;
 
+    private final UserProfileService userProfileService;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Inject
@@ -23,6 +26,12 @@ public class IncrementCommandExecutor implements CommandExecutor {
         this.userProfileService = userProfileService;
     }
 
+    /**
+     * Executes the IncrementCommand by incrementing the corresponding user profile properties.
+     *
+     * @param command The IncrementCommand to execute.
+     * @throws EntityNotFoundException if the user profile is not found.
+     */
     @Override
     public void execute(Command command) {
         IncrementCommand incrementCommand = (IncrementCommand) command;
@@ -37,11 +46,16 @@ public class IncrementCommandExecutor implements CommandExecutor {
             }
             userProfileService.update(oldUserProfile);
         } catch (EntityNotFoundException e) {
-            logger.error("UserProfile not found with UserId::" + incrementCommand.getUserId(), e);
+            logger.error("UserProfile not found with UserId: " + incrementCommand.getUserId(), e);
             throw e;
         }
     }
 
+    /**
+     * Sets the logger to use for logging.
+     *
+     * @param logger The logger to set.
+     */
     public void setLogger(Logger logger) {
         this.logger = logger;
     }

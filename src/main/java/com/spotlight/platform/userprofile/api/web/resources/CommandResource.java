@@ -1,6 +1,5 @@
 package com.spotlight.platform.userprofile.api.web.resources;
 
-
 import com.spotlight.platform.userprofile.api.core.commands.Command;
 import com.spotlight.platform.userprofile.api.core.commands.CommandData;
 import com.spotlight.platform.userprofile.api.core.commands.CommandFactory;
@@ -18,6 +17,9 @@ import java.util.List;
 @Path("/commands")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
+/**
+ * Resource class for handling user profile commands.
+ */
 public class CommandResource {
 
     private final CommandExecutorRegistry executorRegistry;
@@ -27,6 +29,12 @@ public class CommandResource {
         this.executorRegistry = executorRegistry;
     }
 
+    /**
+     * Handles a list of user profile commands.
+     *
+     * @param commandDataList The list of command data objects.
+     * @return The response indicating the success or failure of the command execution.
+     */
     @POST
     public Response handleCommands(List<CommandData> commandDataList) {
         for (CommandData commandData : commandDataList) {
@@ -43,7 +51,6 @@ public class CommandResource {
                 return Response.status(Response.Status.BAD_REQUEST).entity("Invalid command type").build();
             }
         }
-
 
         // Return a success response
         return Response.ok().build();
